@@ -29,7 +29,7 @@ class HashTable:
 
     def djb2(self, key):
         hash_int = 5381
-        byte_arr = string.encode()
+        byte_arr = key.encode()
 
         for byte in byte_arr:
             hash_int = ((hash_int * 33) ^ byte) % 0x100000000
@@ -52,6 +52,8 @@ class HashTable:
 
         Implement this.
         """
+        key_hash = self.hash_index(key)
+        self.storage[key_hash] = (key, value)
 
     def delete(self, key):
         """
@@ -61,6 +63,8 @@ class HashTable:
 
         Implement this.
         """
+        key_hash = self.hash_index(key)
+        self.storage[key_hash] = None
 
     def get(self, key):
         """
@@ -70,6 +74,11 @@ class HashTable:
 
         Implement this.
         """
+        key_hash = self.hash_index(key)
+        if self.storage[key_hash] is not None:
+            return self.storage[key_hash][1]
+        else:
+            return None
 
     def resize(self):
         """
@@ -78,6 +87,14 @@ class HashTable:
 
         Implement this.
         """
+        # self.storage += [None] * self.capacity
+        self.capacity *= 2
+        new_storage = [None] * self.capacity
+        for value in self.storage:
+            if value is not None:
+                key_hash = self.hash_index(value[0])
+                new_storage[key_hash] = value
+        self.storage = new_storage
 
 if __name__ == "__main__":
     ht = HashTable(2)
