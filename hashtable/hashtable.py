@@ -91,7 +91,8 @@ class HashTable:
         Implement this.
         """
         index = self.hash_index(key)
-        if self.storage is None:
+
+        if self.storage[index] is None:
             print('item not found')
         else:    
             self.storage[index] = None
@@ -106,7 +107,7 @@ class HashTable:
         Implement this.
         """
         index = self.hash_index(key)
-        if self.storage is None:
+        if self.storage[index] is None:
             print('item not found')
         else:
             # [index][1] because the key value pair is stored as a list(?) tuple(?)
@@ -126,7 +127,7 @@ class HashTable:
             if item is not None:
                 index = self.hash_index(item[0])
                 new_storage[index] = (item[0], item[1])
-                
+
         self.storage = new_storage
 
 if __name__ == "__main__":
