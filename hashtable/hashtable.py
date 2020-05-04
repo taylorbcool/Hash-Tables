@@ -15,7 +15,10 @@ class HashTable:
     that accepts string keys
 
     Implement this.
-    """
+    """ 
+    def __init__(self, capacity):
+        self.capacity = capacity
+        self.storage = [None] * self.capacity
 
     def fnv1(self, key):
         """
@@ -25,11 +28,13 @@ class HashTable:
         """
 
     def djb2(self, key):
-        """
-        DJB2 32-bit hash function
+        hash_int = 5381
+        byte_arr = string.encode()
 
-        Implement this, and/or FNV-1.
-        """
+        for byte in byte_arr:
+            hash_int = ((hash_int * 33) ^ byte) % 0x100000000
+        
+        return hash_int
 
     def hash_index(self, key):
         """
@@ -42,7 +47,7 @@ class HashTable:
     def put(self, key, value):
         """
         Store the value with the given key.
-
+        
         Hash collisions should be handled with Linked List Chaining.
 
         Implement this.
