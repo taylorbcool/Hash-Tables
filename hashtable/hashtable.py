@@ -1,3 +1,5 @@
+import math
+
 class HashTableEntry:
 
     def __init__(self, key, value):
@@ -82,9 +84,9 @@ class HashTable:
         else:
             return None
 
-    def resize(self):
+    def resize(self, factor):
         
-        self.capacity *= 2
+        self.capacity = math.ceil(self.capacity * factor if factor else 2)
         new_storage = [None] * self.capacity
         for node in self.storage:
             while node:
