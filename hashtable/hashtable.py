@@ -1,7 +1,4 @@
 class HashTableEntry:
-    """
-    Hash Table entry, as a linked list node.
-    """
 
     def __init__(self, key, value):
         self.key = key
@@ -10,12 +7,7 @@ class HashTableEntry:
 
 
 class HashTable:
-    """
-    A hash table that with `capacity` buckets
-    that accepts string keys
 
-    Implement this.
-    """ 
     def __init__(self, capacity):
         self.capacity = capacity
         self.storage = [None] * self.capacity
@@ -37,21 +29,10 @@ class HashTable:
         return hash_int
 
     def hash_index(self, key):
-        """
-        Take an arbitrary key and return a valid integer index
-        between within the storage capacity of the hash table.
-        """
-        #return self.fnv1(key) % self.capacity
         return self.djb2(key) % self.capacity
 
     def put(self, key, value):
-        """
-        Store the value with the given key.
-        
-        Hash collisions should be handled with Linked List Chaining.
-
-        Implement this.
-        """
+      
         key_hash = self.hash_index(key)
         entry = HashTableEntry(key, value)
         if self.storage[key_hash] is None:
@@ -89,13 +70,7 @@ class HashTable:
         return None
 
     def get(self, key):
-        """
-        Retrieve the value stored with the given key.
 
-        Returns None if the key is not found.
-
-        Implement this.
-        """
         key_hash = self.hash_index(key)
         if self.storage[key_hash] is not None:
             node = self.storage[key_hash]
@@ -114,7 +89,6 @@ class HashTable:
 
         Implement this.
         """
-        # self.storage += [None] * self.capacity
         self.capacity *= 2
         new_storage = [None] * self.capacity
         for value in self.storage:
