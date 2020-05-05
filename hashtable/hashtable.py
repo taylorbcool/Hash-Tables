@@ -83,12 +83,7 @@ class HashTable:
             return None
 
     def resize(self):
-        """
-        Doubles the capacity of the hash table and
-        rehash all key/value pairs.
-
-        Implement this.
-        """
+        
         self.capacity *= 2
         new_storage = [None] * self.capacity
         for node in self.storage:
