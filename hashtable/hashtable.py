@@ -91,10 +91,11 @@ class HashTable:
         """
         self.capacity *= 2
         new_storage = [None] * self.capacity
-        for value in self.storage:
-            if value is not None:
-                key_hash = self.hash_index(value[0])
-                new_storage[key_hash] = value
+        for node in self.storage:
+            while node:
+                key_hash = self.hash_index(node.key)
+                new_storage[key_hash] = node
+                node = node.next
         self.storage = new_storage
 
 if __name__ == "__main__":
