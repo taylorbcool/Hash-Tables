@@ -50,9 +50,11 @@ class HashTable:
                 node = node.next
             prev.next = entry
         self.item_count += 1
+        # self.get_load_factor()
             
     def delete(self, key):
 
+        deleted = False
         warning = 'Given key does not exist in table.'
         key_hash = self.hash_index(key)
         if not self.storage[key_hash]:
@@ -61,18 +63,21 @@ class HashTable:
         node = self.storage[key_hash]
         if node.key == key:
             self.storage[key_hash] = node.next
-            self.item_count += 1
-            return None
+            deleted = True
         else:
             prev = node
             cur = node.next
             while cur:
                 if cur.key == key:
                     prev.next = cur.next
-                    self.item_count += 1
-                    return None
+                    deleted = True
+                    break
                 cur = cur.next
-        print(warning)
+        if deleted:
+            self.item_count -= 1
+            # self.get_load_factor()
+        else:
+            print(warning)
         return None
 
     def get(self, key):
@@ -88,9 +93,10 @@ class HashTable:
         else:
             return None
 
-    def resize(self, factor):
+    def resize(self, factor=None):
 
-        self.capacity = math.ceil(self.capacity * factor if factor else 2)
+        factor = factor if factor else 2
+        self.capacity = math.ceil(self.capacity * factor)
         new_storage = [None] * self.capacity
         for node in self.storage:
             while node:
@@ -98,6 +104,14 @@ class HashTable:
                 new_storage[key_hash] = node
                 node = node.next
         self.storage = new_storage
+
+    def get_load_factor(self):
+
+        load_factor =  self.item_count / self.capacity
+        if load_factor >= 0.7:
+            self.resize(2)
+        elif load_factor <= 0.2 and self.capacity >= 256:
+            self.resize(0.5)
 
 if __name__ == "__main__":
     ht = HashTable(2)
