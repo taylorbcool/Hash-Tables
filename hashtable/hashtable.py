@@ -63,15 +63,26 @@ class HashTable:
             node.next = entry
             
     def delete(self, key):
-        """
-        Remove the value stored with the given key.
 
-        Print a warning if the key is not found.
-
-        Implement this.
-        """
+        warning = 'Given key does not exist in table.'
         key_hash = self.hash_index(key)
-        self.storage[key_hash] = None
+        if not self.storage[key_hash]:
+            print(warning)
+            return None
+        node = self.storage[key_hash]
+        if node.key == key:
+            self.storage[key_hash] = node.next
+            return None
+        else:
+            prev = node
+            cur = node.next
+            while cur:
+                if cur.key == key:
+                    prev.next = cur.next
+                    return None
+                cur = cur.next
+        print(warning)
+        return None
 
     def get(self, key):
         """
