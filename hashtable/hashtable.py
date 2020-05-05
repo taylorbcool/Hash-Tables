@@ -58,9 +58,13 @@ class HashTable:
             self.storage[key_hash] = entry
         else:
             node = self.storage[key_hash]
-            while node.next:
+            while node:
+                if node.key == key:
+                    node.value = value
+                    return
+                prev = node
                 node = node.next
-            node.next = entry
+            prev.next = entry
             
     def delete(self, key):
 
