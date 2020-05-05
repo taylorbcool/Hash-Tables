@@ -79,8 +79,13 @@ class HashTable:
             self.resize()
         
         index = self.hash_index(key)
-        self.storage[index] = (key, value)
-        self.size += 1
+
+        if self.storage[index]:
+            self.delete(key)
+            self.put(key, value)
+        else:
+            self.storage[index] = (key, value)
+            self.size += 1
 
     def delete(self, key):
         """
@@ -108,9 +113,9 @@ class HashTable:
         """
         index = self.hash_index(key)
         if self.storage[index] is None:
-            print('item not found')
+            return None
         else:
-            # [index][1] because the key value pair is stored as a list(?) tuple(?)
+            # [index][1] because the key value pair is stored as a tuple
             return self.storage[index][1]
 
     def resize(self):
