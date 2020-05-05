@@ -13,6 +13,7 @@ class HashTable:
     def __init__(self, capacity):
         self.capacity = capacity
         self.storage = [None] * self.capacity
+        self.item_count = 0
 
     def fnv1(self, key):
         """
@@ -48,6 +49,7 @@ class HashTable:
                 prev = node
                 node = node.next
             prev.next = entry
+        self.item_count += 1
             
     def delete(self, key):
 
@@ -59,6 +61,7 @@ class HashTable:
         node = self.storage[key_hash]
         if node.key == key:
             self.storage[key_hash] = node.next
+            self.item_count += 1
             return None
         else:
             prev = node
@@ -66,6 +69,7 @@ class HashTable:
             while cur:
                 if cur.key == key:
                     prev.next = cur.next
+                    self.item_count += 1
                     return None
                 cur = cur.next
         print(warning)
@@ -85,7 +89,7 @@ class HashTable:
             return None
 
     def resize(self, factor):
-        
+
         self.capacity = math.ceil(self.capacity * factor if factor else 2)
         new_storage = [None] * self.capacity
         for node in self.storage:
