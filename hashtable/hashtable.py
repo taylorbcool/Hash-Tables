@@ -53,8 +53,15 @@ class HashTable:
         Implement this.
         """
         key_hash = self.hash_index(key)
-        self.storage[key_hash] = (key, value)
-
+        entry = HashTableEntry(key, value)
+        if self.storage[key_hash] is None:
+            self.storage[key_hash] = entry
+        else:
+            node = self.storage[key_hash]
+            while node.next:
+                node = node.next
+            node.next = entry
+            
     def delete(self, key):
         """
         Remove the value stored with the given key.
@@ -76,7 +83,12 @@ class HashTable:
         """
         key_hash = self.hash_index(key)
         if self.storage[key_hash] is not None:
-            return self.storage[key_hash][1]
+            node = self.storage[key_hash]
+            while node:
+                if node.key == key:
+                    return node.value
+                node = node.next
+            return None
         else:
             return None
 
