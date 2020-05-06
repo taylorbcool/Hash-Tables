@@ -84,7 +84,7 @@ class HashTable:
         else:
             self.storage[index] = (key, value)
             self.size += 1
-            self.compute_load_factor
+            self.compute_load_factor()
 
     def delete(self, key):
         """
@@ -101,6 +101,7 @@ class HashTable:
         else:    
             self.storage[index] = None
             self.size -= 1
+            self.compute_load_factor()
 
     def get(self, key):
         """
@@ -140,6 +141,7 @@ class HashTable:
         runs resize when load factor increases above 0.7
         """
         load_factor = self.size / self.capacity
+
         if load_factor >= 0.7:
             self.resize()
 
