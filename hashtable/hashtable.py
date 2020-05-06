@@ -10,10 +10,11 @@ class HashTableEntry:
 
 class HashTable:
 
-    def __init__(self, capacity):
+    def __init__(self, capacity, min_capacity=None):
         self.capacity = capacity
         self.storage = [None] * self.capacity
         self.item_count = 0
+        self.min_capacity = min_capacity if min_capacity else 8
 
     def fnv1(self, key):
         """
@@ -38,8 +39,10 @@ class HashTable:
       
         key_hash = self.hash_index(key)
         entry = HashTableEntry(key, value)
+        added = False
         if self.storage[key_hash] is None:
             self.storage[key_hash] = entry
+            added = True
         else:
             node = self.storage[key_hash]
             while node:
@@ -49,8 +52,10 @@ class HashTable:
                 prev = node
                 node = node.next
             prev.next = entry
-        self.item_count += 1
-        # self.get_load_factor()
+            added = True
+        if added:
+            self.item_count += 1
+            # self.get_load_factor()
             
     def delete(self, key):
 
@@ -110,7 +115,7 @@ class HashTable:
         load_factor =  self.item_count / self.capacity
         if load_factor >= 0.7:
             self.resize(2)
-        elif load_factor <= 0.2 and self.capacity >= 256:
+        elif load_factor <= 0.2 and self.capacity >= self.min_capacity * 2:
             self.resize(0.5)
 
 if __name__ == "__main__":
