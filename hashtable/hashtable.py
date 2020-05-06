@@ -55,7 +55,7 @@ class HashTable:
             added = True
         if added:
             self.item_count += 1
-            # self.get_load_factor()
+            self.get_load_factor()
             
     def delete(self, key):
 
@@ -80,7 +80,7 @@ class HashTable:
                 cur = cur.next
         if deleted:
             self.item_count -= 1
-            # self.get_load_factor()
+            self.get_load_factor()
         else:
             print(warning)
         return None
