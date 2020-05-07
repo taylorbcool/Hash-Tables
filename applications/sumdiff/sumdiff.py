@@ -17,11 +17,10 @@ for i, a in enumerate(q):
     for b in q[i:]:
         val = f(a) + f(b)
         if val_map.get(val):
-            val_map[val].append((a, b))
+            val_map[val].add((a, b))
         else:
-            val_map[val] = [(a, b)]
-        if a != b:
-            val_map[val].append((b, a))
+            val_map[val] = {(a, b)}
+        val_map[val].add((b, a))
 
 
 q = list(reversed(q))
