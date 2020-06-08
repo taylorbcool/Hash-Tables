@@ -11,11 +11,18 @@ class HashTableEntry:
 
 class HashTable:
     """
-    A hash table that with `capacity` buckets
+    A hash table with `capacity` buckets
     that accepts string keys
 
     Implement this.
     """
+    def __init__(self, capacity):
+        # looks like a DLL
+        self.head = None
+        self.tail = None
+        self.capacity = capacity
+        self.size = 0
+        self.storage = [None] * capacity
 
     def fnv1(self, key):
         """
@@ -23,6 +30,19 @@ class HashTable:
 
         Implement this, and/or DJB2.
         """
+        # found pseudocode for this algorithm on wikipedia
+
+        fnv_offset_basis = 0xcbf29ce484222325
+        fnv_prime = 0x100000001b3
+        fnv_size = 2**64
+
+        fnv_hash = fnv_offset_basis
+
+        for char in key:
+            fnv_hash = (fnv_hash * fnv_prime) % fnv_size
+            fnv_hash = fnv_hash ^ ord(char)
+
+        return fnv_hash
 
     def djb2(self, key):
         """
@@ -30,6 +50,14 @@ class HashTable:
 
         Implement this, and/or FNV-1.
         """
+        # also found pseudocode for this algorithm
+
+        djb_hash = 5381
+
+        for char in key:
+            djb_hash = ((djb_hash * 33) + ord(char))
+
+        return djb_hash
 
     def hash_index(self, key):
         """
@@ -47,6 +75,16 @@ class HashTable:
 
         Implement this.
         """
+        
+        index = self.hash_index(key)
+
+        if self.storage[index]:
+            self.delete(key)
+            self.put(key, value)
+        else:
+            self.storage[index] = (key, value)
+            self.size += 1
+            self.compute_load_factor()
 
     def delete(self, key):
         """
@@ -56,6 +94,14 @@ class HashTable:
 
         Implement this.
         """
+        index = self.hash_index(key)
+
+        if self.storage[index] is None:
+            print('item not found')
+        else:    
+            self.storage[index] = None
+            self.size -= 1
+            self.compute_load_factor()
 
     def get(self, key):
         """
@@ -65,6 +111,12 @@ class HashTable:
 
         Implement this.
         """
+        index = self.hash_index(key)
+        if self.storage[index] is None:
+            return None
+        else:
+            # [index][1] because the key value pair is stored as a tuple
+            return self.storage[index][1]
 
     def resize(self):
         """
@@ -73,6 +125,25 @@ class HashTable:
 
         Implement this.
         """
+        self.capacity *= 2
+        new_storage = [None] * self.capacity
+
+        for item in self.storage:
+            if item is not None:
+                index = self.hash_index(item[0])
+                new_storage[index] = (item[0], item[1])
+
+        self.storage = new_storage
+
+    def compute_load_factor(self):
+        """
+        calculates and maintains load factor
+        runs resize when load factor increases above 0.7
+        """
+        load_factor = self.size / self.capacity
+
+        if load_factor >= 0.7:
+            self.resize()
 
 if __name__ == "__main__":
     ht = HashTable(2)
